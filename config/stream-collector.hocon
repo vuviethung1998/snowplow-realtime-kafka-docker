@@ -1,0 +1,103 @@
+collector {
+  # The collector runs as a web service specified on the following interface and port.
+  interface = "0.0.0.0"
+  port = 8080
+
+  p3p {
+    policyRef = "/w3c/p3p.xml"
+    CP = "NOI DSP COR NID PSA OUR IND COM NAV STA"
+  }
+
+  crossDomain {
+    enabled = false
+    domains = [ "*" ]
+    secure = true
+  }
+
+  cookie {
+    enabled = false
+    expiration = "365 days"
+    name = snowplow
+    domain = "{{cookieDomain}}"
+  }
+
+  doNotTrackCookie {
+    enabled = false
+    name = snowplow_do_not_track
+    value = snowplow_do_not_track_value
+  }
+
+  cookieBounce {
+    enabled = false
+    name = "n3pc"
+    fallbackNetworkUserId = "00000000-0000-4000-A000-000000000000"
+    forwardedProtocolHeader = "X-Forwarded-Proto"
+  }
+
+  redirectMacro {
+    enabled = false
+    placeholder = "[TOKEN]"
+  }
+
+  # Customize response handling for requests for the root path ("/").
+  # Useful if you need to redirect to web content or privacy policies regarding the use of this collector.
+  rootResponse {
+    enabled = false
+    statusCode = 302
+    # Optional, defaults to empty map
+    headers = {
+        Location = "https://127.0.0.1/",
+        X-Custom = "something"
+    }
+    # Optional, defaults to empty string
+    body = "302, redirecting"
+  }
+
+  streams {
+    # Events which have successfully been collected will be stored in the good stream/topic
+    good = snowplow_raw_good
+
+    # Events that are too big (w.r.t Kinesis 1MB limit) will be stored in the bad stream/topic
+    bad = snowplow_raw_bad
+
+    useIpAddressAsPartitionKey = false
+
+    # Enable the chosen sink by uncommenting the appropriate configuration
+    sink {
+      enabled = kafka
+
+      # Or Kafka
+      brokers = "kafka:9092"
+      ## Number of retries to perform before giving up on sending a record
+      retries = 1
+    }
+
+    # Incoming events are stored in a buffer before being sent to Kinesis/Kafka.
+    # The buffer is emptied whenever:
+    # - the number of stored records reaches record-limit or
+    # - the combined size of the stored records reaches byte-limit or
+    # - the time in milliseconds since the buffer was last emptied reaches time-limit
+    buffer {
+      byteLimit = 1000000
+      recordLimit = 0 # Not supported by Kafka; will be ignored
+      timeLimit = 1000
+    }
+  }
+}
+
+akka {
+  loglevel = DEBUG # 'OFF' for no logging, 'DEBUG' for all logging.
+  loggers = ["akka.event.slf4j.Slf4jLogger"]
+
+  http.server {
+    remote-address-header = on
+
+    raw-request-uri-header = on
+
+    # Define the maximum request length (the default is 2048)
+    parsing {
+      max-uri-length = 32768
+      uri-parsing-mode = relaxed
+    }
+  }
+}

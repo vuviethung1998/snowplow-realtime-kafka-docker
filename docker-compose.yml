@@ -1,0 +1,138 @@
+version: '3'
+
+services: 
+    elasticsearch:
+        container_name: elasticsearch
+        image: blacktop/elasticsearch:6.5.4
+        volumes:
+            - es-volume:/usr/share/elasticsearch/data
+        ports:
+            - "9200:9200"
+        environment:
+            - "cluster.name=snowplow"
+            - "http.host=0.0.0.0"
+            - "http.cors.enabled=true"
+            - "http.cors.allow-origin=*"
+            - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+            - "bootstrap.memory_lock=true"
+        cap_add:
+            - IPC_LOCK
+        ulimits:
+            memlock:
+                soft: -1
+                hard: -1
+            nofile:
+                soft: 65536
+                hard: 65536
+        restart: unless-stopped
+
+    kibana:
+        container_name: kibana
+        image: blacktop/kibana:6.5.4
+        ports:
+            - "5601:5601"
+        depends_on:
+            - elasticsearch
+        restart: unless-stopped
+
+    head:
+        container_name: head
+        image: kazgurs/elasticsearch-head:latest
+        ports:
+            - "9100:9100"
+        depends_on:
+            - elasticsearch
+        restart: unless-stopped
+
+    # schema lookup table 
+    iglu:
+        container_name: iglu
+        image: nginx
+        ports:
+            - "81:80"
+        volumes:
+            - ./iglu:/usr/share/nginx/html:ro
+        command: /bin/bash -c "echo 'autoindex on;' > /etc/nginx/conf.d/autoindex.conf && nginx -g 'daemon off;'"
+        restart: unless-stopped
+
+    zookeeper:
+        image: confluentinc/cp-zookeeper
+        environment:
+            ZOOKEEPER_CLIENT_PORT: 2181
+            ZOOKEEPER_TICK_TIME: 2000
+        volumes:
+            - zk-data:/var/lib/zookeeper/data
+            - zk-logs:/var/lib/zookeeper/log
+            - secrets:/etc/zookeeper/secrets
+        restart: unless-stopped
+
+    kafka:
+        image: confluentinc/cp-kafka
+        depends_on:
+            - zookeeper
+        ports: 
+            - "9093:9093"
+        environment:
+            KAFKA_BROKER_ID: 1
+            KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+            KAFKA_ADVERTISED_LISTENERS: INSIDE://kafka:9092,OUTSIDE://localhost:9093
+            KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INSIDE:PLAINTEXT,OUTSIDE:PLAINTEXT      
+            KAFKA_LISTENERS: INSIDE://0.0.0.0:9092,OUTSIDE://0.0.0.0:9093
+            KAFKA_ZOOKEEPER_CONNECT: 'zookeeper:2181'
+            KAFKA_INTER_BROKER_LISTENER_NAME: INSIDE
+        volumes:
+            - kafka-data:/var/lib/kafka/data
+            - secrets:/etc/kafka/secrets
+        restart: unless-stopped
+
+    stream-collector:
+        container_name: stream-collector 
+        image: snowplow-docker-registry.bintray.io/snowplow/scala-stream-collector-kafka:0.14.0
+        command: [ "--config", "/snowplow/config/stream-collector.hocon" ]
+        depends_on:
+            - kafka
+        ports:
+            - "8080:8080"
+        volumes:
+            - ./config:/snowplow/config
+        environment:
+            - "SP_JAVA_OPTS=-Xms512m -Xmx512m"
+        restart: unless-stopped
+
+    stream-enrich:
+        container_name: stream-enrich
+        image: snowplow-docker-registry.bintray.io/snowplow/stream-enrich-kafka:0.19.0
+        command: [
+            "--config", "/snowplow/config/stream-enrich.hocon",
+            "--resolver", "file:/snowplow/config/resolver.json",
+            "--enrichments", "file:/snowplow/config/enrichments",
+            "--force-cached-files-download"
+        ]
+        depends_on:
+            - stream-collector
+        links: 
+            - iglu
+        volumes:
+            - ./config:/snowplow/config
+        environment:
+            - "SP_JAVA_OPTS=-Xms512m -Xmx512m"
+        restart: unless-stopped
+
+    events-processor:
+        build: 
+            context: ./events-processor
+        restart: unless-stopped
+    
+    events-to-es:
+        build: 
+            context: ./events-to-es
+        restart: unless-stopped
+        
+volumes: 
+    es-volume:
+    zk-logs: {}
+    zk-data: {}
+    kafka-data: {}
+    secrets: {}
+
+    
