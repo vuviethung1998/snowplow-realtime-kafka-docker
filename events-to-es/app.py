@@ -25,7 +25,7 @@ def push_kafka_to_es(es_records):
 
 if __name__=="__main__":
     config = getConfig()
-
+    
     kafka_consumer = KafkaConsumer(
         group_id=config['group_id'],
         bootstrap_servers=config['bootstrap_servers'],

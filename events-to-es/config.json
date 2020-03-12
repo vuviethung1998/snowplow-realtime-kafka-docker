@@ -2,5 +2,5 @@
     "bootstrap_servers" : "kafka:9092",
     "group_id" : "enrich",
     "offset": "latest",
-    "es_port": "elasticsearch:9200"
+    "es_port": "172.16.100.119:9200"
 }
