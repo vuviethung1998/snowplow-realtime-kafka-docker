@@ -19,16 +19,14 @@ enrich {
 
     sourceSink {
       enabled =  kafka
-
-
       # Minimum and maximum backoff periods, in milliseconds
+      brokers = "172.16.33.91:9093"
       backoffPolicy {
          minBackoff = 200
          maxBackoff = 1000
       }
 
       # Or Kafka (Comment out for other types)
-      brokers = "kafka:9092"
       # Number of retries to perform before giving up on sending a record
       retries = 1
     }
@@ -36,10 +34,10 @@ enrich {
     buffer {
       byteLimit = 1000000
       recordLimit = 0 # Not supported by Kafka; will be ignored
-      timeLimit = 2000
+      timeLimit = 100000
     }
 
-    appName = "snowplow"
+    appName = "enrich"
   }
 }
 
