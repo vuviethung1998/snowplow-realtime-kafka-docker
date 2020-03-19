@@ -24,6 +24,10 @@ if __name__=="__main__":
         'bootstrap.servers': config['bootstrap_servers'],
     })
 
+    kafka_producer_product = Producer({
+        'bootstrap.servers': ["10.10.137.42:6667", "10.10.137.43:6667"],
+    })
+
     kafka_consumer.subscribe(['snowplow_enriched_good'])
 
     while True:
@@ -41,9 +45,9 @@ if __name__=="__main__":
         # print(event)
         try:
             json_data = snowplow_analytics_sdk.event_transformer.transform(event)
-            kafka_producer.poll(0)
-            kafka_producer.produce('snowplow_json_event', json.dumps(json_data).encode('utf-8'))
-            kafka_producer.flush()
+            kafka_producer_product.poll(0)
+            kafka_producer_product.produce('snowplow_json_event', json.dumps(json_data).encode('utf-8'))
+            kafka_producer_product.flush()
 
         except snowplow_analytics_sdk.snowplow_event_transformation_exception.SnowplowEventTransformationException as e:
             for error_message in e.error_messages:
