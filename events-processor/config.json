@@ -1,5 +1,6 @@
 {
     "bootstrap_servers" : "kafka:9092",
+    "bootstrap_servers_producer": ["10.10.137.42:6667", "10.10.137.43:6667"],
     "group_id" : "enrich",
     "offset": "latest"
 }

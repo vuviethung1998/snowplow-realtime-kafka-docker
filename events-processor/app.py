@@ -21,7 +21,8 @@ if __name__=="__main__":
     })
 
     kafka_producer = Producer({
-        'bootstrap.servers': config['bootstrap_servers'],
+        # 'bootstrap.servers': config['bootstrap_servers'],
+        'bootstrap.servers': ["10.10.137.42:6667", "10.10.137.43:6667"]
     })
 
     kafka_producer_product = Producer({

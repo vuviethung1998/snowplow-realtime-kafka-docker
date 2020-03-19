@@ -1,0 +1,155 @@
+{
+    "$schema": "http://iglucentral.com/schemas/com.snowplowanalytics.self-desc/schema/jsonschema/1-0-0#",
+	"description": "Schema for gianhadat",
+	"self": {
+		"vendor": "com.gianhadat",
+		"name": "gianhadat_tracker",
+		"format": "jsonschema",
+		"version": "1-0-0"
+	},
+
+	"type": "object",
+	"properties": {
+        "schema_type": {
+            "type": "string"
+        },
+        "page_url": {
+            "type": "string"
+        },
+        "timestamp": {
+            "type": "string"
+        },
+        "finger":  {
+            "type": "string"
+        },
+        "referer_url": {
+            "type": ["string", "null"]
+        },
+        "user_name": {
+            "type": ["string", "null"]
+        },
+        "bds_id": {
+            "type": ["integer", "null"]
+        },
+        "street_id": {
+            "type": ["integer", "null"]
+        },
+        "ward_id": {
+            "type": ["integer", "null"]
+        },
+        "district_id": {
+            "type": ["integer", "null"]
+        },
+        "city_id": {
+            "type": ["integer", "null"]
+        },
+        "project_id": {
+            "type": ["integer", "null"]
+        },
+        "property_type": {
+            "type": ["string", "null"]
+        },
+        "property_search_content": {
+            "type": ["string", "null"]
+        },
+        "property_search_type":{
+            "type": ["string", "null"]
+        },
+        "advanced_search_city": {
+            "type": ["string", "null"]
+        },
+        "advanced_search_district": {
+            "type": ["string", "null"]
+        },
+        "advanced_search_ward": {
+            "type": ["string", "null"]
+        },
+        "advanced_search_group": {
+            "type": ["string", "null"]
+        },
+        "advanced_search_street": {
+            "type": ["string", "null"]
+        },
+        "advanced_search_lane": {
+            "type": ["string", "null"]
+        },
+        "advanced_search_alley": {
+            "type": ["string", "null"]
+        },
+        "advanced_search_house_number": {
+            "type": ["string", "null"]
+        },
+        "advanced_search_lat": {
+            "type": ["number", "null"]
+        },
+        "advanced_search_lon": {
+            "type": ["number", "null"]
+        },
+        "huong_nha":  {
+            "type": ["integer", "null"]
+        },       
+        "hinh_dang_lo_dat": {
+            "type": ["integer", "null"]
+        },
+        "loai_nha": {
+            "type": ["integer", "null"]
+        },
+        "loai_bat_dong_san": {
+            "type": ["integer", "null"]
+        },
+        "so_tang": {
+            "type": ["integer", "null"],
+            "maximum":50,
+            "minimum":0
+        },
+        "vi_tri_duong": {
+            "type": ["integer", "null"]
+        },
+        "cach_duong_oto": {
+            "type": ["number", "null"],
+            "maximum":1000,
+            "minimum":0
+        },    
+        "be_rong_via_he": {
+            "type": ["number", "null"],
+            "maximum":100,
+            "minimum":0
+        },
+        "chieu_rong_duong": {
+            "type": ["number", "null"],
+            "maximum":100,
+            "minimum":0
+        },
+        "nam_xay_dung": {
+            "type": ["integer", "null"],
+            "minimum":1900,
+            "maximum":2030
+        },
+        "gia_estimate": {
+            "type": ["number", "null"],
+            "minimum":0
+        },
+        "gia_khach_hang_nhap": {
+            "type": ["number", "null"],
+            "minimum":0
+        },
+        "so_to": {
+            "type": ["integer", "null"],
+            "minimum":0
+        },
+        "so_thua": {
+            "type": ["integer", "null"],
+            "minimum":0
+        },
+        "gia_thue_trung_binh": {
+            "type": ["number", "null"],
+            "minimum":0
+        },
+        "gia_ban_trung_binh": {
+            "type": ["number", "null"],
+            "minimum":0
+        }
+    },
+    "required": ["schema_type","page_url","timestamp","finger"],
+    "additionalProperties": false
+}
