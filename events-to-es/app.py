@@ -43,7 +43,7 @@ if __name__=="__main__":
         print(json_event)
         try:
             es_records.append(kafka_to_es(json_event))
-            if(len(es_records) == 10 ):
+            if(len(es_records) == 100):
                 push_kafka_to_es(es_records)
                 es_records.clear()
         except Exception as e:

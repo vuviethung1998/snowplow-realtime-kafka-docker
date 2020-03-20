@@ -1,6 +1,6 @@
 {
-    "bootstrap_servers" : ["10.10.137.42:6667", "10.10.137.43:6667"],
+    "bootstrap_servers" : "kafka:9092",
     "group_id" : "enrich",
     "offset": "latest",
-    "es_port": "10.10.137.41:9201"
+    "es_port": ["hd01:9201", "hd02:9201", "hd03:9201"]
 }

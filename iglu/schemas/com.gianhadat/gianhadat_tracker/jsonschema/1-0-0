@@ -25,8 +25,9 @@
         "referer_url": {
             "type": ["string", "null"]
         },
-        "user_name": {
-            "type": ["string", "null"]
+        "user_id": {
+            "type": ["integer", "null"],
+            "minimum": 0
         },
         "bds_id": {
             "type": ["integer", "null"]
@@ -85,16 +86,16 @@
         "advanced_search_lon": {
             "type": ["number", "null"]
         },
-        "huong_nha":  {
+        "huong_nha_id":  {
             "type": ["integer", "null"]
         },       
-        "hinh_dang_lo_dat": {
+        "hinh_dang_lo_dat_id": {
             "type": ["integer", "null"]
         },
-        "loai_nha": {
+        "loai_nha_id": {
             "type": ["integer", "null"]
         },
-        "loai_bat_dong_san": {
+        "loai_bat_dong_san_id": {
             "type": ["integer", "null"]
         },
         "so_tang": {
@@ -102,10 +103,18 @@
             "maximum":50,
             "minimum":0
         },
-        "vi_tri_duong": {
+        "vi_tri": {
             "type": ["integer", "null"]
         },
-        "cach_duong_oto": {
+        "dien_tich": {
+            "type": ["number", "null"],
+            "minimum":0
+        },
+        "mat_tien": {
+            "type": ["number", "null"],
+            "minimum":0
+        },
+        "khoang_cach_duong_oto": {
             "type": ["number", "null"],
             "maximum":1000,
             "minimum":0
@@ -115,7 +124,7 @@
             "maximum":100,
             "minimum":0
         },
-        "chieu_rong_duong": {
+        "chieu_rong_mat_duong": {
             "type": ["number", "null"],
             "maximum":100,
             "minimum":0
@@ -125,7 +134,11 @@
             "minimum":1900,
             "maximum":2030
         },
-        "gia_estimate": {
+        "gia_estimate_ctxd": {
+            "type": ["number", "null"],
+            "minimum":0
+        },
+        "gia_estimate_dat": {
             "type": ["number", "null"],
             "minimum":0
         },
@@ -133,13 +146,16 @@
             "type": ["number", "null"],
             "minimum":0
         },
-        "so_to": {
+        "so_to_ban_do": {
             "type": ["integer", "null"],
             "minimum":0
         },
-        "so_thua": {
+        "so_thua_ban_do": {
             "type": ["integer", "null"],
             "minimum":0
+        },
+        "thua_dat_id": {
+            "type": ["integer", "null"]
         },
         "gia_thue_trung_binh": {
             "type": ["number", "null"],

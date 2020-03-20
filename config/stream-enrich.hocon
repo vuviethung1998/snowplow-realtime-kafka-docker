@@ -39,7 +39,7 @@ enrich {
       timeLimit = 2000
     }
 
-    appName = "snowplow"
+    appName = "enrich"
   }
 }
 
