@@ -1,5 +1,9 @@
 {
     "bootstrap_servers" : "kafka:9092",
+<<<<<<< HEAD
+=======
+    "bootstrap_servers_producer": ["hd02:6667", "hd03:6667"],
+>>>>>>> a92cf986e77af24de34bca471bcb2524309c3ca5
     "group_id" : "enrich",
     "offset": "latest"
 }

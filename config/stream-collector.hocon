@@ -65,9 +65,8 @@ collector {
     # Enable the chosen sink by uncommenting the appropriate configuration
     sink {
       enabled = kafka
-
+      brokers = "172.16.33.91:9093"
       # Or Kafka
-      brokers = "kafka:9092"
       ## Number of retries to perform before giving up on sending a record
       retries = 1
     }
@@ -80,7 +79,7 @@ collector {
     buffer {
       byteLimit = 1000000
       recordLimit = 0 # Not supported by Kafka; will be ignored
-      timeLimit = 1000
+      timeLimit = 100000
     }
   }
 }

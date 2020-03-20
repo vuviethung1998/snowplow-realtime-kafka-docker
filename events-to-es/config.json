@@ -2,5 +2,9 @@
     "bootstrap_servers" : "kafka:9092",
     "group_id" : "enrich",
     "offset": "latest",
+<<<<<<< HEAD
     "es_port": ["hd01:9201", "hd02:9201", "hd03:9201"]
+=======
+    "es_port": "cendev3:9200"
+>>>>>>> a92cf986e77af24de34bca471bcb2524309c3ca5
 }
